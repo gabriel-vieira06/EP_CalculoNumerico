@@ -61,7 +61,93 @@ void abreMenu(){
 }
 
 void conversaoNumerica(){
-	printf("\n\tConversao\n\n");
+	
+	/*
+		Le um valor decimal, converte e mostra o resultado para
+		a base binaria, octal e hexadecimal.
+		
+		OBS: O ideal seria que a variavel decimal fosse do tipo
+		long double, mas ao faze-lo ocorrem erros de execucao,
+		e mesmo depois de adaptar o algoritmo, os erros persistem.
+		Tendo isso em mente, ha a possibilidade de valores com mais de
+		6 casas decimais, apresentarem conversoes inadequadas.
+		As conversoes, no entanto mostram por volta de ate 90 casas decimais significativas.
+	*/
+	
+	double decimal;
+	char hexadecimal[100], octal[100], binario[100];
+	
+	system("cls");
+	printf("\n\tDigite um numero decimal: ");
+	scanf("%lf", &decimal);
+	
+	void converteDecimal(int base, char* snp)
+	{
+		/*
+			Converte o valor decimal dado pelo usuario
+			em um valor de base dado como parametro e armazena
+			na string passada.
+			
+			ex: converteDecimal(2, binario)
+		
+		*/
+		int parte_inteira = (int) decimal;
+		double parte_fracionaria = decimal - parte_inteira;
+		int posicao = 1, valor_temp, i;
+		char aux;
+		
+		if(parte_inteira < 0)				//	Verifica o sinal do decimal e garante que a conversao
+		{									//	tera o mesmo sinal
+			snp[0] = '-';
+			parte_inteira *= -1;
+		} else snp[0] = ' ';
+		
+		if(parte_fracionaria < 0) parte_fracionaria *= -1;
+		
+		while(parte_inteira != 0)
+		{
+			valor_temp = parte_inteira % base;
+			if(valor_temp < 10) valor_temp += 48;	//	Se for menor que 10, numero da tabela ascii
+			else valor_temp += 55;					//	Senao, letra da tabela ascii
+			snp[posicao] = valor_temp;
+			posicao++;
+			parte_inteira /= base;
+		}
+		
+		for(i = 0; i < posicao/2; i++)				//	Swap dos valores da parte inteira, do contrario
+		{											//	os valores da parte inteira aparecem invertidos
+			aux = snp[i+1];
+			snp[i+1] = snp[posicao-i-1];
+			snp[posicao-i-1] = aux;
+		}
+		
+		if(parte_fracionaria != 0){						// Se existir parte fracionaria, separa por um ponto
+			snp[posicao] = '.';
+			posicao++;
+		}
+		
+		while(parte_fracionaria != 0)
+		{
+			valor_temp = parte_fracionaria * base;
+			if(valor_temp < 10) valor_temp += 48;
+			else valor_temp += 55;
+			snp[posicao] = valor_temp;
+			posicao++;
+			parte_fracionaria *= base;
+			parte_fracionaria -= (int) parte_fracionaria;
+		}
+		
+		snp[posicao] = '\0';
+		
+	}
+	
+	converteDecimal(2, binario);
+	converteDecimal(8, octal);
+	converteDecimal(16, hexadecimal);
+	
+	printf("\n\tBinario: %s\n", binario);
+	printf("\tOctal: %s\n", octal);
+	printf("\tHexadecimal: %s\n\n", hexadecimal);
 }
 
 void recebeSistemaLinear(){
