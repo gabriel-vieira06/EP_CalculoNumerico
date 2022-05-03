@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <conio.h>
 #include <stdlib.h>
 #include <windows.h>
 
@@ -58,6 +59,7 @@ void abreMenu(){
 		}
     
 	}while(operacao!='F');
+	
 }
 
 void conversaoNumerica(){
@@ -76,10 +78,6 @@ void conversaoNumerica(){
 	
 	double decimal;
 	char hexadecimal[100], octal[100], binario[100];
-	
-	system("cls");
-	printf("\n\tDigite um numero decimal: ");
-	scanf("%lf", &decimal);
 	
 	void converteDecimal(int base, char* snp)
 	{
@@ -141,6 +139,10 @@ void conversaoNumerica(){
 		
 	}
 	
+	system("cls");
+	printf("\n\tDigite um numero decimal: ");
+	scanf("%lf", &decimal);
+	
 	converteDecimal(2, binario);
 	converteDecimal(8, octal);
 	converteDecimal(16, hexadecimal);
@@ -148,10 +150,80 @@ void conversaoNumerica(){
 	printf("\n\tBinario: %s\n", binario);
 	printf("\tOctal: %s\n", octal);
 	printf("\tHexadecimal: %s\n\n", hexadecimal);
+	
 }
 
 void recebeSistemaLinear(){
-	printf("\n\tSistema Linear\n\n");
+	
+	char nomeArquivo[50], *linha;
+	FILE *arquivo;
+	int numeroVariaveis, i, j;
+	double **coeficiente;
+	
+	double** criaMatriz (int l, int c)
+	{	
+	/* 	
+		Se houver memoria disponivel, cria uma matriz de double
+		com l linha e c colunas e devolve um ponteiro para a matriz;
+		Caso contrario, devolve um ponteiro nulo.
+	*/
+	
+		int i, j;
+		double** m;
+		
+		m = malloc(sizeof (double*) * l);
+		
+		if (m == NULL)	return NULL;	// Falta de memoria.
+			
+		for (i = 0; i < l; i++)
+		{
+			m[i] = malloc(sizeof(double) * c);
+			if (m[i] == NULL)		// Falta de memoria.
+			{
+				for (j = 0; j < i; j++) free (m[j]);
+				free (m);
+				return NULL;
+			}
+		}
+	
+		return m;
+	}
+	
+	system("cls");
+	printf("\n\tDigite o nome do arquivo a ser lido: ");
+	scanf("%s", nomeArquivo);
+	
+	arquivo = fopen(nomeArquivo, "rt");
+	
+	if(arquivo == NULL)
+	{
+		printf("\n\n\tArquivo nao encontrado.\n");
+		return;
+	}
+	
+	fscanf(arquivo, "%d", &numeroVariaveis);
+	
+	coeficiente = criaMatriz(numeroVariaveis, numeroVariaveis + 1);
+	
+	if(coeficiente == NULL)
+	{
+		printf("\n\n\tFaltou memoria.\n");
+		return;
+	}
+	
+	for(i = 0; i < numeroVariaveis; i++)
+	{
+		printf("\n");
+		for (j = 0; j < numeroVariaveis + 1; j++)
+		{
+			fscanf(arquivo, "%lf", &coeficiente[i][j]);
+			printf("\t%.0lf", coeficiente[i][j]);	// Linha de teste
+		}
+		printf("\n");
+	}
+	
+	fclose(arquivo);
+	
 }
 void lerEquacaoAlgebrica(){
 	printf("\n\tEquacao Algebrica\n\n");
