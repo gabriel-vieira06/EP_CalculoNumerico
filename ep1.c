@@ -100,11 +100,17 @@ void conversaoNumerica(){
 		int posicao = 1, valor_temp, i;
 		char aux;
 		
-		if(parte_inteira < 0)				//	Verifica o sinal do decimal e garante que a conversao
+		if(decimal < 0)						//	Verifica o sinal do decimal e garante que a conversao
 		{									//	tera o mesmo sinal
 			valorConvertido[0] = '-';
 			parte_inteira *= -1;
 		} else valorConvertido[0] = ' ';
+		
+		if(parte_inteira == 0)				// Caso nao haja parte inteira, a conversao tambem nao tera
+		{
+			valorConvertido[posicao] = '0';
+			posicao++;
+		}
 		
 		if(parte_fracionaria < 0) parte_fracionaria *= -1;
 		
@@ -318,5 +324,110 @@ void recebeSistemaLinear()
 }	// Fim recebeSistemaLinear
 
 void lerEquacaoAlgebrica(){
-	printf("\n\tEquacao Algebrica\n\n");
+	
+	int grauEquacao, i, contLimites = 0;
+	double *coeficientes, limites[4];
+	
+	void teoremaLagrange()
+	{
+		double n, k = 0, an, b = 0;		// n: grau do polinomio, k: maior indice dos coeficientes negativos do polinomio
+										// an: coeficiente de grau n, b: modulo do menor coeficiente negativo
+		
+		int i;
+		
+		n = grauEquacao;
+		an = coeficientes[0];
+		
+		for(i = 0; i <= n; i++)
+		{
+			if(coeficientes[i] < 0 && k == 0) k = n-i;
+			if(coeficientes[i] < 0 && coeficientes[i] < b) b = coeficientes[i];
+		}
+		
+		b = fabs(b);	// guardamos o modulo de b
+		
+		limites[contLimites] = 1 + pow((b/an), (1.0/(n-k)));
+		
+	}	// Fim teoremaLagrange
+	
+	void metodoNewton()
+	{
+		
+	}	// Fim metodoNewton
+	
+	void swap(double *a, double *b)
+	{
+		/*
+			Funcao auxiliar simples para o swap dos valores presentes 
+			em diferentes posicoes de um ponteiro double.
+		*/
+		
+		double aux;
+		
+		aux = *a;
+		*a = *b;
+		*b = aux;
+	}
+	
+	printf("\n\tDigite o grau da equacao: ");
+	scanf("%d", &grauEquacao);
+	
+	coeficientes = malloc(sizeof(double) * grauEquacao + 1);
+	
+	if(coeficientes == NULL)
+	{
+		printf("\n\n\tFaltou memoria.\n");
+		return;
+	}
+	
+	for(i = 0; i <= grauEquacao; i++)
+	{
+		printf("\n\tDigite a[%d]: ", grauEquacao - i);
+		scanf("%lf", &coeficientes[i]);
+	}
+
+	if(coeficientes[0] <= 0)
+	{
+		printf("\n\tErro: a[%d] <= 0, encerrando operacao.", grauEquacao);
+		return;
+	}
+	
+	if(coeficientes[grauEquacao] == 0) 
+	{
+		printf("\n\tErro: a[0] = 0, encerrando operacao.");
+		return;
+	}
+	
+	teoremaLagrange();	// Calcula L para limite superior das raizes positivas.
+	contLimites++;
+	
+	for(i = 0; i < (grauEquacao+1)/2; i++)
+	{
+		swap(&coeficientes[i], &coeficientes[grauEquacao-i]);
+	}
+	
+	teoremaLagrange();	// Calcula L1 para o Limite inferior das raizes positivas.
+	contLimites++;
+	
+	for(i = 0; i <= grauEquacao; i++)
+	{
+		if((grauEquacao-i) % 2) coeficientes[i] *= -1;	//	Trocamos o sinal dos coeficientes de indice impar para obter X^n . p(-1/x)
+			
+	}
+	
+	teoremaLagrange();	// Calcula L3 para o limite superior das raizes negativas
+	contLimites++;
+	
+	for(i = 0; i < (grauEquacao+1)/2; i++)				//	Invertemos a ordem dos coeficientes para obter p(-x)
+	{											
+		swap(&coeficientes[i], &coeficientes[grauEquacao-i]);
+	}
+	
+	teoremaLagrange();	// Calcula L2 para o limite inferior das raizes negativas
+	
+	printf("\n\tLimites das raizes positivas: ");
+	printf("\n\t%lf <= x+ <= %lf", 1/limites[1], limites[0]);
+	printf("\n\tLimites das raizes negativas: ");
+	printf("\n\t%lf <= x- <= %lf", -limites[3], -1/limites[2]);
+
 }
