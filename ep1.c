@@ -18,8 +18,8 @@ void main()
 	
 }	// Fim main
 
-void abreMenu(){
-	
+void abreMenu()
+{	
 	/*
 		Funcao que imprime ao usuario um menu com 4 opcoes:
 		‘C’ – Conversao, ‘S’ – Sistema Linear, ‘E’ – Equacao Algebrica e ‘F’ – Finalizar.
@@ -40,6 +40,7 @@ void abreMenu(){
 	  	coordenada.X = x;
 	  	coordenada.Y = y;
 	  	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coordenada);
+	  	
 	}	// Fim gotoxy
 	
 	do {
@@ -64,12 +65,12 @@ void abreMenu(){
     		case 'E': lerEquacaoAlgebrica(); break;
 		}
     
-	}while(operacao!='F');
+	} while(operacao!='F');
 	
 }	// Fim abreMenu
 
-void conversaoNumerica(){
-	
+void conversaoNumerica()
+{	
 	/*
 		Le um valor decimal e mostra seu valor
 		na base binaria, octal e hexadecimal.
@@ -151,7 +152,6 @@ void conversaoNumerica(){
 		
 	}	// Fim converteDecimal
 	
-	system("cls");
 	printf("\n\tDigite um numero decimal: ");
 	scanf("%lf", &decimal);
 	
@@ -218,7 +218,7 @@ void recebeSistemaLinear()
 	{
 		/*
 			A partir da solucao trivial, todas as variaveis = 0, calcula solucoes aproximadas
-			utilizando o Metodo de Gauss-Seidel e armazena na variavel de solucoes.
+			utilizando o Metodo de Gauss-Seidel e armazena no vetor de solucoes.
 			O algoritmo para de calcular quando a variacao nas aproximacoes seja menor que 10^-8
 			ou quando alcancar 1000 iteracoes.
 			Quando encerrada, a funcao imprime o numero de iteracoes que realizou.
@@ -251,7 +251,6 @@ void recebeSistemaLinear()
 				
 	}	// Fim metodoGaussSeidel
 	
-	system("cls");
 	printf("\n\tDigite o nome do arquivo a ser lido: ");
 	scanf("%s", nomeArquivo);
 	
@@ -319,24 +318,48 @@ void recebeSistemaLinear()
 		for(i = 0; i< numeroVariaveis; i++) printf("\n\tx[%d] = %lf", i+1, solucoes[i]);
 	}
 	
+	for (i = 0; i < numeroVariaveis; i++) free(m[i]);
+	free (m);
+	free(solucoes);
+	free(somatorioLinhas);
+	free(somatorioColunas);
+	
 	fclose(arquivo);
 	
 }	// Fim recebeSistemaLinear
 
-void lerEquacaoAlgebrica(){
+void lerEquacaoAlgebrica()
+{
+	/*
+		Le o grau de uma equacao algebrica, em seguida
+		le os coeficientes a[n] ate a[0], printa erro caso a[n] <= 0 ou a[0] = 0.
+		
+		A funcao utiliza o Teorema de Lagrange para calcular os limites das raizes da equacao
+		e tambem determina uma aproximacao de uma raiz utilizando o Metodo de Newton.
+	*/
 	
 	int grauEquacao, i, contLimites = 0;
 	double *coeficientes, limites[4];
 	
 	void teoremaLagrange()
 	{
+		/*
+			Aplica o Teorema de Lagrange utlizando sua equacao caracteristica
+			e guarda o resultado no vetor de limites para ser exibido ao usuario.
+		*/
+		
 		double n, k = 0, an, b = 0;		// n: grau do polinomio, k: maior indice dos coeficientes negativos do polinomio
-										// an: coeficiente de grau n, b: modulo do menor coeficiente negativo
-		
+										// an: coeficiente de indice n, b: modulo do menor coeficiente negativo
 		int i;
-		
+
 		n = grauEquacao;
 		an = coeficientes[0];
+		
+		if(an < 0)											// Caso an seja negativo, k = n e teriamos uma raiz de indice 0
+		{													// se multiplicarmos o polinomio por -1 evitamos esse problema
+			for(i = 0; i<= n; i++) coeficientes[i] *= -1;
+			an *= -1;
+		}
 		
 		for(i = 0; i <= n; i++)
 		{
@@ -345,13 +368,58 @@ void lerEquacaoAlgebrica(){
 		}
 		
 		b = fabs(b);	// guardamos o modulo de b
-		
-		limites[contLimites] = 1 + pow((b/an), (1.0/(n-k)));
+		limites[contLimites] = 1 + pow(b/an, 1.0/(n-k));
 		
 	}	// Fim teoremaLagrange
 	
 	void metodoNewton()
 	{
+		/*
+			Utiliza o limite superior das raizes positivas da equacao como x[0]
+			e aplica o Metodo de Newton para o calculo de uma raiz aproximada.
+			
+			Ao final, imprime o resultado obtido e as iteracoes realizadas quando a variacao 
+			entre o modulo de duas aproximacoes for menor que 10^-8 ou quando ocorrerem 1000 iteracoes.
+		*/
+		
+		double aux, *derivada, x = limites[0], fx[2];	// x: aproximacao resultante
+		int contaIteracoes, i, j;						// fx: resultado do polinomio (e sua derivada) no ponto x
+		
+		derivada = malloc(sizeof(double) * grauEquacao);
+		if(derivada == NULL)
+		{
+			printf("\n\n\tFaltou memoria.\n");
+			return;
+		}
+		
+		for(i = 0; i < grauEquacao; i++)
+		{
+			if((grauEquacao-i) % 2) coeficientes[i] *= -1;		//	Trocamos o sinal dos coeficientes de indice impar para obter p(x) original
+			derivada[i] = coeficientes[i] * (grauEquacao - i);	//	Encontramos a derivada de f(x)
+		}
+		
+		for(i = 0; i < 1000; i++)
+		{
+			fx[0] = 0; fx[1] = 0;								//	Resetamos os valores em fx
+			for(j = 0; j <= grauEquacao; j++)
+			{
+				fx[0] += pow(x,grauEquacao-j)*coeficientes[j];				// Calcula f(x)
+				if(j != grauEquacao) fx[1] += pow(x,grauEquacao-j-1)*derivada[j];	// Calcula f'(x)
+			}
+			aux = x - fx[0]/fx[1];
+			if(fabs(aux - x) < EPSILON)
+			{
+				printf("\n\n\tIteracoes: %d\n", i);
+				printf("\n\tx = %lf\n", x);
+				free(derivada);
+				return;
+			}
+			x = aux;
+		}
+		
+		printf("\n\n\tIteracoes: %d\n", i);
+		printf("\n\tx = %lf\n", x);
+		free(derivada);
 		
 	}	// Fim metodoNewton
 	
@@ -403,7 +471,7 @@ void lerEquacaoAlgebrica(){
 	
 	for(i = 0; i < (grauEquacao+1)/2; i++)
 	{
-		swap(&coeficientes[i], &coeficientes[grauEquacao-i]);
+		swap(&coeficientes[i], &coeficientes[grauEquacao-i]);	// Invertemos a ordem dos coeficientes para obter X^n . p(1/x)
 	}
 	
 	teoremaLagrange();	// Calcula L1 para o Limite inferior das raizes positivas.
@@ -412,7 +480,6 @@ void lerEquacaoAlgebrica(){
 	for(i = 0; i <= grauEquacao; i++)
 	{
 		if((grauEquacao-i) % 2) coeficientes[i] *= -1;	//	Trocamos o sinal dos coeficientes de indice impar para obter X^n . p(-1/x)
-			
 	}
 	
 	teoremaLagrange();	// Calcula L3 para o limite superior das raizes negativas
@@ -429,5 +496,10 @@ void lerEquacaoAlgebrica(){
 	printf("\n\t%lf <= x+ <= %lf", 1/limites[1], limites[0]);
 	printf("\n\tLimites das raizes negativas: ");
 	printf("\n\t%lf <= x- <= %lf", -limites[3], -1/limites[2]);
+	
+	metodoNewton();
+	
+	free(coeficientes);
+	
+}	// Fim lerEquacaoAlgebrica
 
-}
