@@ -11,10 +11,3 @@
 ![image](https://user-images.githubusercontent.com/75680725/166827849-f461a055-4023-4be4-a147-b13b03b125e5.png)
 
 > O programa permite a Conversão de números decimais, leitura e resolução de uma matriz de um Sistema Linear Quadrado via arquivo de texto utilizando Método de Gauss-Seidel, calcula o limite superior e inferior das raízes positivas e negativas de um polinômio e encontra uma raíz real positiva do mesmo usando Método de Newton.
-
-## 💻 Pré-requisitos
-
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
-<!---Estes são requisitos. Adicionar, duplicar ou remover conforme necessário--->
-* Você instalou a versão mais recente do `<gcc>`
-* Você tem uma máquina `<Windows>`
