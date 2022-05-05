@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
-#include <windows.h>
 #include <math.h>
 
 #define EPSILON 0.00000001	//10^-8
@@ -27,36 +25,17 @@ void abreMenu()
 	*/
 
 	char operacao;
-
-	void gotoxy(int x, int y)
-	{
-		/*
-			Função auxiliar que manipula a localizacao do cursor no console
-			a fim de tornar o menu principal mais pratico e intuitivo.
-			Recebe como parametro a coluna x e a linha y onde o cursor deve se mover.
-		*/
-		
-	  	COORD coordenada;
-	  	coordenada.X = x;
-	  	coordenada.Y = y;
-	  	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coordenada);
-	  	
-	}	// Fim gotoxy
 	
 	do {
-		printf("\n\n\t");
-        system("pause");
-        system("cls");
-        gotoxy(5,  1); printf("MENU PRINCIPAL - Exercicio-programa");
-        gotoxy(5,  3); printf("[ C ] Conversao");
-        gotoxy(5,  4); printf("[ S ] Sistema Linear");
-        gotoxy(5,  5); printf("[ E ] Equacao Algebrica");
-        gotoxy(5,  6); printf("[ F ] Finalizar");
-        gotoxy(5,  7); printf("[ ? ] Opcao Desejada (Case Sensitive)");
+		printf("\n\n\tMENU PRINCIPAL - Exercicio-programa");
+        printf("\n\t[ C ] Conversao");
+        printf("\n\t[ S ] Sistema Linear");
+        printf("\n\t[ E ] Equacao Algebrica");
+        printf("\n\t[ F ] Finalizar");
+        printf("\n\tOpcao Desejada (Case Sensitive): ");
     
         do {
-        	gotoxy(5,  7); printf("[ ? ] Opcao Desejada (Case Sensitive)");
-        	gotoxy(7, 7); scanf("%c", &operacao);
+        	operacao = getchar();
         } while (operacao != 'C' && operacao != 'S' && operacao != 'E' && operacao != 'F');
     
     	switch (operacao) {
@@ -247,7 +226,7 @@ void recebeSistemaLinear()
 			}
 		}
 		
-		printf("\n\n\tIteracoes: %d\n", contaIteracoes);
+		printf("\n\n\tIteracoes: %d", contaIteracoes);
 				
 	}	// Fim metodoGaussSeidel
 	
@@ -410,7 +389,7 @@ void lerEquacaoAlgebrica()
 			if(fabs(aux - x) < EPSILON)
 			{
 				printf("\n\n\tIteracoes: %d\n", i);
-				printf("\n\tx = %lf\n", x);
+				printf("\n\tx = %lf", x);
 				free(derivada);
 				return;
 			}
