@@ -72,13 +72,7 @@ void conversaoNumerica()
 {	
 	/*
 		Le um valor decimal e mostra seu valor
-		na base binaria, octal e hexadecimal.
-		
-		OBS: O ideal seria que a variavel decimal fosse do tipo
-		long double, mas ao faze-lo ocorrem erros de execucao,
-		e mesmo depois de adaptar o algoritmo, os erros persistem.
-		Tendo isso em mente, ha a possibilidade de valores com mais de
-		10 casas decimais, apresentarem conversoes inadequadas.
+		na base binaria, octal e hexadecimal..
 	*/
 	
 	double decimal;
@@ -102,10 +96,10 @@ void recebeSistemaLinear()
 	/*	
 		A funcao le o nome de um arquivo de texto passado pelo usuario
 		que contenha: o numero de variaveis de um sistema linear
-		seguido pelo sistema linear em forma de matriz.
+		seguido pela matriz aumentada do sistema linear.
 		
-		A funcao imprime o sistema e se ele atende ou nao aos criterios das linhas
-		e das colunas. Em caso positivo (de um dos criterios ser atendido), 
+		A funcao imprime se o sistema atende ou nao aos criterios das linhas
+		e das colunas. Em caso de um dos criterios ser atendido, 
 		a funcao realiza o calculo de uma solucao aproximada do sistema linear
 		utilizando o Metodo de Gauss-Seidel.
 	*/
@@ -197,7 +191,7 @@ void lerEquacaoAlgebrica()
 {
 	/*
 		Le o grau de uma equacao algebrica, em seguida
-		le os coeficientes a[n] ate a[0], printa erro caso a[n] <= 0 ou a[0] = 0.
+		le os coeficientes a[n] ate a[0], imprime erro caso a[n] <= 0 ou a[0] = 0.
 		
 		A funcao utiliza o Teorema de Lagrange para calcular os limites das raizes da equacao
 		e tambem determina uma aproximacao de uma raiz utilizando o Metodo de Newton.
@@ -276,10 +270,11 @@ void converteDecimal(int base, char* valorConvertido, double decimal)
 {
 	/*
 		Converte o valor decimal dado pelo usuario.
-		A base da conversao e a string onde a conversao sera armazenada
-		sao passados como parametros.
 		
-		ex: converteDecimal(2, binario), armazena na string binario a conversao
+		A base da conversao, a string onde a conversao sera armazenada
+		e o valor decimal sao passados como parametros.
+		
+		ex: converteDecimal(2, binario, decimal), armazena na string binario a conversao
 		do valor decimal para um sistema numerico posicional de base 2
 	*/
 	
@@ -376,6 +371,10 @@ void metodoGaussSeidel(int numeroVariaveis, double* solucoes, double** m)
 		utilizando o Metodo de Gauss-Seidel e armazena no vetor de solucoes.
 		O algoritmo para de calcular quando a variacao nas aproximacoes seja menor que 10^-8
 		ou quando alcancar 1000 iteracoes.
+		
+		Os parametros incluem: o numero de variaveis do sistema linear, o vetor de solucoes
+		onde serao armazenados os resultados e a matriz aumentada do sistema linear.
+		
 		Quando encerrada, a funcao imprime o numero de iteracoes que realizou.
 	*/
 	
@@ -411,10 +410,14 @@ void teoremaLagrange(double n, double an, double* coeficientes, double* limites,
 	/*
 		Aplica o Teorema de Lagrange utlizando sua equacao caracteristica
 		e guarda o resultado no vetor de limites para ser exibido ao usuario.
+		
+		n: grau do polinomio, an: coeficiente de indice n
+		Recebe tambem como parametros o vetor de coeficientes da equacao,
+		o vetor de limites onde sera depositado o resultado do calculo do teorema,
+		um inteiro com a posicao onde sera depositado o resultado.
 	*/
 	
-	double k = 0, b = 0;		// n: grau do polinomio, k: maior indice dos coeficientes negativos do polinomio
-									// an: coeficiente de indice n, b: modulo do menor coeficiente negativo
+	double k = 0, b = 0;			// k: maior indice dos coeficientes negativos do polinomio, b: modulo do menor coeficiente negativo
 	int i;
 		
 	if(an < 0)											// Caso an seja negativo, k = n e teriamos uma raiz de indice 0
@@ -439,6 +442,9 @@ void metodoNewton(double* limites, int grauEquacao, double* coeficientes)
 	/*
 		Utiliza o limite superior das raizes positivas da equacao como x[0]
 		e aplica o Metodo de Newton para o calculo de uma raiz aproximada.
+		
+		Recebe como parametros o vetor de limites calculados pelo teorema de Lagrange
+		o grau da equacao algebrica e o vetor de coeficientes da equacao.
 		
 		Ao final, imprime o resultado obtido e as iteracoes realizadas quando a variacao 
 		entre o modulo de duas aproximacoes for menor que 10^-8 ou quando ocorrerem 1000 iteracoes.
