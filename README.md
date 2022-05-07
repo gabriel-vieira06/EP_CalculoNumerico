@@ -17,13 +17,13 @@
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
 <!---Estes são requisitos. Adicionar, duplicar ou remover conforme necessário--->
 * Você instalou a versão mais recente do `<gcc>`
-* Você tem uma máquina `<Windows/Linux>`
+* Você tem uma máquina `<Windows/Linux/nacOS>`
 
 ## ⚙️ Compilando
 
 Para compilar o programa, utilize o comando depois de abrir o seu console:
 
-* Se seu Sistema Operacional for Windows, rode: <code>gcc ep1.c</code>
+* Se seu Sistema Operacional for Windows ou macOS, rode: <code>gcc ep1.c</code>
 * Se seu Sistema Operacional for Linux, rode: <code>gcc ep1.c -lm</code>
 
 **OBS:** Você também pode adicionar o argumento <code>-o NomeASuaEscolha</code> para escolher um nome personalizado ao arquivo executável gerado pelo seu compilador.
