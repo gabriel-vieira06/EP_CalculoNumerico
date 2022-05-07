@@ -1,3 +1,12 @@
+/*
+	Integrantes da equipe:
+	
+	- Gabriel Vieira Cavalcante
+	- Luiz Matheus Sena Macedo
+	- Mateus Rodrigues Alves
+	- Gilberto Magno Souza Vieira
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -132,7 +141,7 @@ void conversaoNumerica()
 	}	// Fim converteDecimal
 	
 	printf("\n\tDigite um numero decimal: ");
-	scanf("%lf", &decimal);
+	scanf("%lf%*c", &decimal);
 	
 	converteDecimal(2, binario);
 	converteDecimal(8, octal);
@@ -231,7 +240,7 @@ void recebeSistemaLinear()
 	}	// Fim metodoGaussSeidel
 	
 	printf("\n\tDigite o nome do arquivo a ser lido: ");
-	scanf("%s", nomeArquivo);
+	scanf("%s%*c", nomeArquivo);
 	
 	arquivo = fopen(nomeArquivo, "rt");
 	
@@ -374,7 +383,7 @@ void lerEquacaoAlgebrica()
 		for(i = 0; i < grauEquacao; i++)
 		{
 			if((grauEquacao-i) % 2) coeficientes[i] *= -1;		//	Trocamos o sinal dos coeficientes de indice impar para obter p(x) original
-			derivada[i] = coeficientes[i] * (grauEquacao - i);	//	Encontramos a derivada de f(x)
+			derivada[i] = coeficientes[i] * (grauEquacao - i);	//	Encontramos os coeficientes da derivada de f(x)
 		}
 		
 		for(i = 0; i < 1000; i++)
@@ -382,7 +391,7 @@ void lerEquacaoAlgebrica()
 			fx[0] = 0; fx[1] = 0;								//	Resetamos os valores em fx
 			for(j = 0; j <= grauEquacao; j++)
 			{
-				fx[0] += pow(x,grauEquacao-j)*coeficientes[j];				// Calcula f(x)
+				fx[0] += pow(x,grauEquacao-j)*coeficientes[j];						// Calcula f(x)
 				if(j != grauEquacao) fx[1] += pow(x,grauEquacao-j-1)*derivada[j];	// Calcula f'(x)
 			}
 			aux = x - fx[0]/fx[1];
@@ -417,7 +426,7 @@ void lerEquacaoAlgebrica()
 	}
 	
 	printf("\n\tDigite o grau da equacao: ");
-	scanf("%d", &grauEquacao);
+	scanf("%d%*c", &grauEquacao);
 	
 	coeficientes = malloc(sizeof(double) * grauEquacao + 1);
 	
@@ -430,7 +439,7 @@ void lerEquacaoAlgebrica()
 	for(i = 0; i <= grauEquacao; i++)
 	{
 		printf("\n\tDigite a[%d]: ", grauEquacao - i);
-		scanf("%lf", &coeficientes[i]);
+		scanf("%lf%*c", &coeficientes[i]);
 	}
 
 	if(coeficientes[0] <= 0)
