@@ -17,7 +17,7 @@
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
 <!---Estes são requisitos. Adicionar, duplicar ou remover conforme necessário--->
 * Você instalou a versão mais recente do `<gcc>`
-* Você tem uma máquina `<Windows/Linux/nacOS>`
+* Você tem uma máquina `<Windows/Linux/macOS>`
 
 ## ⚙️ Compilando
 
