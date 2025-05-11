@@ -40,7 +40,7 @@ void abreMenu()
 {	
 	/*
 		Funcao que imprime ao usuario um menu com 4 opcoes:
-		‘C’ – Conversao, ‘S’ – Sistema Linear, ‘E’ – Equacao Algebrica e ‘F’ – Finalizar.
+		â€˜Câ€™ â€“ Conversao, â€˜Sâ€™ â€“ Sistema Linear, â€˜Eâ€™ â€“ Equacao Algebrica e â€˜Fâ€™ â€“ Finalizar.
 		E entao realiza a chamada do metodo solicitado por ele.
 	*/
 
@@ -48,21 +48,21 @@ void abreMenu()
 	
 	do {
 		printf("\n\n\tMENU PRINCIPAL - Exercicio-programa");
-        printf("\n\t[ C ] Conversao");
-        printf("\n\t[ S ] Sistema Linear");
-        printf("\n\t[ E ] Equacao Algebrica");
-        printf("\n\t[ F ] Finalizar");
-        printf("\n\tOpcao Desejada (Case Sensitive): ");
+        	printf("\n\t[ C ] Conversao");
+        	printf("\n\t[ S ] Sistema Linear");
+        	printf("\n\t[ E ] Equacao Algebrica");
+        	printf("\n\t[ F ] Finalizar");
+      		printf("\n\tOpcao Desejada (Case Sensitive): ");
     
         do {
         	operacao = getchar();
-        } while (operacao != 'C' && operacao != 'S' && operacao != 'E' && operacao != 'F');
+        } while(operacao != 'C' && operacao != 'S' && operacao != 'E' && operacao != 'F');
     
-    	switch (operacao) {
+    	switch(operacao) {
     		case 'C': conversaoNumerica(); break;
     		case 'S': recebeSistemaLinear(); break;
     		case 'E': lerEquacaoAlgebrica(); break;
-		}
+	}
     
 	} while(operacao!='F');
 	
@@ -177,8 +177,8 @@ void recebeSistemaLinear()
 		for(i = 0; i< numeroVariaveis; i++) printf("\n\tx[%d] = %lf", i+1, solucoes[i]);
 	}
 	
-	for (i = 0; i < numeroVariaveis; i++) free(m[i]);
-	free (m);
+	for(i = 0; i < numeroVariaveis; i++) free(m[i]);
+	free(m);
 	free(solucoes);
 	free(somatorioLinhas);
 	free(somatorioColunas);
@@ -354,8 +354,8 @@ double** criaMatriz (int l, int c)
 		m[i] = malloc(sizeof(double) * c);
 		if (m[i] == NULL)		// Falta de memoria.
 		{
-			for (j = 0; j < i; j++) free (m[j]);
-			free (m);
+			for (j = 0; j < i; j++) free(m[j]);
+			free(m);
 			return NULL;
 		}
 	}
